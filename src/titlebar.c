@@ -8,7 +8,7 @@
 
 #define MAX_TITLE_LENGTH 40
 
-char titleBuffer[MAX_TITLE_LENGTH+1] = "minitune";
+static char titleBuffer[MAX_TITLE_LENGTH+1] = "minitune";
 
 struct {
     Color color;

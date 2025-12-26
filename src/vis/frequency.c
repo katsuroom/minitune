@@ -5,8 +5,8 @@
 #include <complex.h>
 #include <float.h>
 
-#define NUM_BANDS (59+1)
-#define BAND_INTERVAL 0.16
+#define BAND_SIZE 5
+#define NUM_BANDS 64    // screenWidth / BAND_SIZE
 
 // bands 0 - 10
 double bands[NUM_BANDS] = {0};
@@ -19,11 +19,11 @@ void process_frequency(void *buffer, unsigned int frames) {
     float* samples = (float*)buffer;
 
     // subtract samples[i] by mean
-    double mean = 0;
-    for(int i = 0; i < frames; ++i) {
-        mean += samples[i];
-    }
-    mean /= frames;
+    // double mean = 0;
+    // for(int i = 0; i < frames; ++i) {
+    //     mean += samples[i];
+    // }
+    // mean /= frames;
 
     // next exponent of 2
     int n = frames;
@@ -36,7 +36,8 @@ void process_frequency(void *buffer, unsigned int frames) {
     double complex in[numFrames];
     
     for(int i = 0; i < frames; ++i) {
-        in[i] = samples[i] - mean;  // subtract mean here
+        // in[i] = samples[i] - mean;  // subtract mean here
+        in[i] = samples[i];
     }
 
     // pad remaining with 0
@@ -51,18 +52,18 @@ void process_frequency(void *buffer, unsigned int frames) {
     double bin_size = (double)sampleRate / numFrames;
 
     for(int i = 0; i < NUM_BANDS; ++i) {
-        // exp = [4, BAND_INTERVAL*(NUM_BANDS-1)]
-        double exp = 4 + i*BAND_INTERVAL;
-        double target_freq = pow(2, exp);
+        // // exp = [4, BAND_INTERVAL*(NUM_BANDS-1)]
+        // double exp = 4 + i*BAND_INTERVAL;
+        // double target_freq = pow(2, exp);
 
         // skip bin 0
         int bin_idx = i+1;
 
-        // if target_freq < frequency_bin[i], use index i+1
-        // if target_freq is larger, jump to target frequency bin
-        if(target_freq > bin_idx*bin_size) {
-            bin_idx = target_freq / bin_size;
-        }
+        // // if target_freq < frequency_bin[i], use index i+1
+        // // if target_freq is larger, jump to target frequency bin
+        // if(target_freq > bin_idx*bin_size) {
+        //     bin_idx = target_freq / bin_size;
+        // }
 
         // bin index too high
         if(bin_idx > numFrames-1) {
@@ -96,15 +97,19 @@ void process_frequency(void *buffer, unsigned int frames) {
                 bands[i] += fmax(delta / 2, 1);
             }
         }
+
+        // min = 0
+        if(bands[i] < 0) bands[i] = 0;
     }
 }
 
 void draw_frequency(int screenWidth, int screenHeight) {
 
-    float barWidth = (float)screenWidth / NUM_BANDS;
+    // float barWidth = (float)screenWidth / NUM_BANDS;
+    int barWidth = BAND_SIZE;
 
     for(int i = 0; i < NUM_BANDS; ++i) {
-        double val = bands[i] * 2;
+        double val = bands[i] * 2.5;
 
         DrawRectangle(i * barWidth, screenHeight - val, barWidth-2, val, (Color){255, 220, 240, 255});
     }

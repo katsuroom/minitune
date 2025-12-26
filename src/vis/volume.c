@@ -3,7 +3,7 @@
 
 #define DB_MINIMUM -40      // minimum displayed dB volume
 
-double volume = DB_MINIMUM;
+static double volume = DB_MINIMUM;
 
 void process_volume(void *buffer, unsigned int frames) {
 

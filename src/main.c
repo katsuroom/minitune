@@ -5,6 +5,7 @@
 #include "titlebar.h"
 #include "seeker.h"
 #include <stdio.h>
+#include <time.h>
 
 int screenWidth = 320;
 int screenHeight = 240;
@@ -27,6 +28,7 @@ int main(void) {
 
     RenderTexture2D target = LoadRenderTexture(screenWidth, screenHeight-CONTROLS_HEIGHT-TITLEBAR_HEIGHT);
 
+    srand(time(NULL));
     init();
 
     while(!WindowShouldClose() && isRunning == true) {
