@@ -22,7 +22,7 @@ float musicTime = 0;
 int sampleRate = 0;
 bool hasMusic = false;
 bool isLooping = false;
-bool isPaused = true;
+bool isPlaying = false;
 
 void set_song_position(float pos) {
     SeekMusicStream(music, pos);
@@ -31,7 +31,7 @@ void set_song_position(float pos) {
 
 void init(void) {
     seeker_init(BTN_SZ*3 - 3, screenHeight - CONTROLS_HEIGHT, screenWidth-(BTN_SZ*6)+6, CONTROLS_HEIGHT);
-    titlebar_init(&hasMusic, &pathBuffer);
+    titlebar_init();
 }
 
 void update(void) {
@@ -55,13 +55,13 @@ void update(void) {
     }
 
     // update music stream
-    if(isPaused == false) {
+    if(isPlaying == true) {
         UpdateMusicStream(music);
         musicTime = GetMusicTimePlayed(music);
 
         // song ended
         if(IsMusicStreamPlaying(music) == false) {
-            isPaused = true;
+            isPlaying = false;
         }
     }
 
@@ -91,7 +91,7 @@ void update(void) {
         if(hasMusic) {
             musicLength = GetMusicTimeLength(music);
             PlayMusicStream(music);
-            isPaused = false;
+            isPlaying = true;
             music.looping = isLooping;
             sampleRate = music.stream.sampleRate;
 
@@ -101,7 +101,10 @@ void update(void) {
             titlebar_update_title(filename);
         }
         else {
-            isPaused = true;
+            isPlaying = false;
+            musicTime = 0;
+            musicLength = 0;
+            titlebar_set_error();
         }
     }
 }
@@ -123,13 +126,13 @@ void draw(void) {
 
     // ICON_PLAYER_PLAY
     // ICON_PLAYER_PAUSE
-    if(GuiButton((Rectangle){BTN_SZ-1, screenHeight-BTN_SZ, BTN_SZ, BTN_SZ}, isPaused ? "#131#" : "#132#")) {
+    if(GuiButton((Rectangle){BTN_SZ-1, screenHeight-BTN_SZ, BTN_SZ, BTN_SZ}, isPlaying ? "#132#" : "#131#")) {
         if(hasMusic == true) {
             // restart finished song
             if(IsMusicStreamPlaying(music) == false)
                 PlayMusicStream(music);
 
-            isPaused = !isPaused;
+            isPlaying = !isPlaying;
         }
     }
 

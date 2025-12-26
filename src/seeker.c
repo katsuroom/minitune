@@ -43,7 +43,7 @@ void seeker_update(void) {
 
     if(hasMusic && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         // if clicked sBar
-        if(CheckCollisionPointRec(mousePos, (Rectangle){sBar.x, sBar.y-sBar.padding, sBar.width, sBar.height+2*sBar.padding})) {
+        if(CheckCollisionPointRec(mousePos, (Rectangle){sBar.x-sBar.padding, sBar.y-sBar.padding, sBar.width+2*sBar.padding, sBar.height+2*sBar.padding})) {
             isDragging = true;
         }
     }

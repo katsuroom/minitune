@@ -5,7 +5,7 @@
 
 extern float musicLength, musicTime;
 extern int sampleRate;
-extern bool hasMusic;
+extern bool hasMusic, isPlaying;
 
 void init(void);
 void update(void);

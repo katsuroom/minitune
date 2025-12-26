@@ -60,8 +60,8 @@ int main(void) {
         EndTextureMode();
 
         BeginDrawing();
-        // ClearBackground(BLANK);
-        ClearBackground(WHITE);
+        ClearBackground(BLANK);
+        // ClearBackground(BLACK);
         DrawTextureRec(target.texture,
             (Rectangle){0, 0, screenWidth, -(screenHeight-CONTROLS_HEIGHT-TITLEBAR_HEIGHT)},
             (Vector2){0, 0}, WHITE

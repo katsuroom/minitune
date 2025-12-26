@@ -8,18 +8,16 @@
 
 #define MAX_TITLE_LENGTH 40
 
-char titleBuffer[MAX_TITLE_LENGTH+1] = {0};
+char titleBuffer[MAX_TITLE_LENGTH+1] = "minitune";
 
 struct {
-    bool* hasMusic;
-    char** title;
+    Color color;
 } titlebar;
 
 int textHeight;
 
-void titlebar_init(bool* hasMusic, char** title) {
-    titlebar.hasMusic = hasMusic;
-    titlebar.title = title;
+void titlebar_init(void) {
+    titlebar.color = GRAY;
 
     Vector2 dim = MeasureTextEx(GetFontDefault(), "0", 10, 0);
     textHeight = dim.y;
@@ -39,18 +37,20 @@ void titlebar_update_title(const char* title) {
             titleBuffer[MAX_TITLE_LENGTH-i] = '.';
     }
 
+    titlebar.color = BLUE;
+
+}
+
+void titlebar_set_error(void) {
+    snprintf(titleBuffer, MAX_TITLE_LENGTH, "Error: file could not be opened.");
+    titlebar.color = RED;
 }
 
 void titlebar_draw() {
     // playing text
     DrawRectangle(0, screenHeight - CONTROLS_HEIGHT - TITLEBAR_HEIGHT, screenWidth, TITLEBAR_HEIGHT, (Color){220, 220, 220, 255});
     
-    if(*titlebar.hasMusic == true) {
-        DrawText(titleBuffer, 4, screenHeight - CONTROLS_HEIGHT - TITLEBAR_HEIGHT + (TITLEBAR_HEIGHT - textHeight)/2, 10, BLUE);
-    }
-    else {
-        DrawText("(No song)", 4, screenHeight - CONTROLS_HEIGHT - TITLEBAR_HEIGHT + (TITLEBAR_HEIGHT - textHeight)/2, 10, GRAY);
-    }
+    DrawText(titleBuffer, 4, screenHeight - CONTROLS_HEIGHT - TITLEBAR_HEIGHT + (TITLEBAR_HEIGHT - textHeight)/2, 10, titlebar.color);
 
     // music time
     sprintf(timeBuffer, "%02d:%02d / %02d:%02d", (int)musicTime / 60, (int)musicTime % 60, (int)musicLength / 60, (int)musicLength % 60);

@@ -2,7 +2,7 @@
 #include <math.h>
 #include <complex.h>
 
-double PI;
+#define PI 3.14159265358979323846
 
 void _fft(double complex buf[], double complex out[], int n, int step)
 {
@@ -26,26 +26,3 @@ void fft(double complex buf[], int n)
 
 	_fft(buf, out, n, 1);
 }
-
-// int main()
-// {
-//     int N = 8;
-// 	PI = atan2(1, 1) * 4;
-
-//     double complex samples[N];
-
-//     for(int i = 0; i < N; ++i) {
-//         double t = (double)i / N;
-//         samples[i] = sin(2*PI*t*1) + sin(2*PI*t*2);
-//     }
-
-// 	fft(samples, N);
-
-//     // print dft result
-//     for(int i = 0; i < N; ++i) {
-//         // printf("[%d] %f\t%f\n", i, out_sin[i], out_cos[i]);
-//         printf("[%d] %lf + %lfi\n", i, creal(samples[i]), cimag(samples[i]));
-//     }
-
-// 	return 0;
-// }
