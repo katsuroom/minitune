@@ -16,3 +16,6 @@ release: bin/resource.rc.data
 %.rc.data:
 	mkdir -p bin
 	windres src/resource.rc -o $(RES)
+
+clean:
+	rm -rf bin *.exe
