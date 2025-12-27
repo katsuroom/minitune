@@ -24,7 +24,7 @@ void titlebar_init(void) {
     textHeight = dim.y;
 }
 
-char timeBuffer[16] = {0};
+char timeBuffer[32] = {0};
 
 void titlebar_update_title(char* title) {
     textDisplay = title;
@@ -43,7 +43,7 @@ void titlebar_draw() {
     DrawText(textDisplay, 4, screenHeight - CONTROLS_HEIGHT - TITLEBAR_HEIGHT + (TITLEBAR_HEIGHT - textHeight)/2, 10, titlebar.color);
 
     // music time
-    sprintf(timeBuffer, "%02d:%02d / %02d:%02d", (int)musicTime / 60, (int)musicTime % 60, (int)musicLength / 60, (int)musicLength % 60);
+    snprintf(timeBuffer, sizeof(timeBuffer), "%02d:%02d / %02d:%02d", (int)musicTime / 60, (int)musicTime % 60, (int)musicLength / 60, (int)musicLength % 60);
 
     int width = MeasureText(timeBuffer, 10);
     DrawText(timeBuffer, screenWidth - 4 - width, screenHeight - CONTROLS_HEIGHT - TITLEBAR_HEIGHT + (TITLEBAR_HEIGHT - textHeight)/2, 10, BLACK);

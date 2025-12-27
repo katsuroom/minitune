@@ -11,8 +11,8 @@ Made using [Raylib v5.5](https://github.com/raysan5/raylib) with Raygui v4.0.
 Uses [libwinsane](https://github.com/skeeto/scratch/tree/master/libwinsane) to support unicode filepaths on Windows.
 
 ## How to Build
-- Download this repository and use the command `make release` to build the executable.
-- This project was developed on Windows.
+- **Windows**: Download this repository and use the command `make release` to build the executable.
+- **Linux**: Link with the Linux build for Raylib, then run gcc with flags `-lraylib -lGL -lm -lpthread -ldl -lrt -lX11`
 
 
 ## Usage
