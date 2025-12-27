@@ -2,6 +2,9 @@
 
 Mini music player with customizable playlist support.
 
+![](screenshot.png)  
+_The track shown above is [Shivered Fragments](https://suno.com/song/1f77498f-1861-4f3b-90b4-d35b29c30745) by kick ice on Suno. It's a very good song, please listen to it!_ 
+
 Made using [Raylib v5.5](https://github.com/raysan5/raylib) with Raygui v4.0.
 - Raylib: uses commit **11429b4** for `SeekMusicStream()` fix (issue #4521), built from source.
 

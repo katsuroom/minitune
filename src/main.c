@@ -18,8 +18,8 @@ bool isDragging = false;
 
 int main(void) {
     
-    SetConfigFlags(FLAG_WINDOW_TRANSPARENT | FLAG_WINDOW_UNDECORATED | FLAG_WINDOW_TOPMOST);
-    InitWindow(screenWidth, screenHeight, "raylib");
+    SetConfigFlags(FLAG_WINDOW_TRANSPARENT | FLAG_WINDOW_UNDECORATED | FLAG_WINDOW_TOPMOST | FLAG_MSAA_4X_HINT);
+    InitWindow(screenWidth, screenHeight, "minitune");
     GuiLoadStyleDefault();
 
     InitAudioDevice();
