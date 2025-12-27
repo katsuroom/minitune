@@ -28,4 +28,6 @@ void playlist_prev(Playlist* p);
 void playlist_next(Playlist* p);
 void playlist_shuffle_next(Playlist* p);
 
+char* alloc_title(const char* title);
+
 #endif

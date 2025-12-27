@@ -6,9 +6,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_TITLE_LENGTH 40
+char appName[] = "minitune";
+char errorMsg[] = "Error: file could not be opened.";
 
-static char titleBuffer[MAX_TITLE_LENGTH+1] = "minitune";
+char* textDisplay = appName;
 
 struct {
     Color color;
@@ -25,24 +26,13 @@ void titlebar_init(void) {
 
 char timeBuffer[16] = {0};
 
-void titlebar_update_title(const char* title) {
-
-    int length = strlen(title);
-    if(length <= MAX_TITLE_LENGTH) {
-        strcpy(titleBuffer, title);
-    }
-    else {
-        strncpy(titleBuffer, title, MAX_TITLE_LENGTH);
-        for(int i = 0; i < 3; ++i)
-            titleBuffer[MAX_TITLE_LENGTH-i] = '.';
-    }
-
+void titlebar_update_title(char* title) {
+    textDisplay = title;
     titlebar.color = BLUE;
-
 }
 
 void titlebar_set_error(void) {
-    snprintf(titleBuffer, MAX_TITLE_LENGTH, "Error: file could not be opened.");
+    textDisplay = errorMsg;
     titlebar.color = RED;
 }
 
@@ -50,7 +40,7 @@ void titlebar_draw() {
     // playing text
     DrawRectangle(0, screenHeight - CONTROLS_HEIGHT - TITLEBAR_HEIGHT, screenWidth, TITLEBAR_HEIGHT, (Color){220, 220, 220, 255});
     
-    DrawText(titleBuffer, 4, screenHeight - CONTROLS_HEIGHT - TITLEBAR_HEIGHT + (TITLEBAR_HEIGHT - textHeight)/2, 10, titlebar.color);
+    DrawText(textDisplay, 4, screenHeight - CONTROLS_HEIGHT - TITLEBAR_HEIGHT + (TITLEBAR_HEIGHT - textHeight)/2, 10, titlebar.color);
 
     // music time
     sprintf(timeBuffer, "%02d:%02d / %02d:%02d", (int)musicTime / 60, (int)musicTime % 60, (int)musicLength / 60, (int)musicLength % 60);

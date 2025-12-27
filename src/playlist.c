@@ -25,6 +25,39 @@ void add_link(Playlist** p, SongEntry** s) {
     }
 }
 
+char* alloc_title(const char* title) {
+    int length = strlen(title);
+    bool trimmed = false;
+    if(length > MAX_TITLE_LENGTH) {
+        trimmed = true;
+        length = MAX_TITLE_LENGTH;
+    }
+
+    char* titleBuffer = malloc(length+1);
+    strncpy(titleBuffer, title, length);
+    titleBuffer[length] = 0;
+
+    if(trimmed == true) {
+        for(int i = 0; i < 3; ++i)
+            titleBuffer[length-1-i] = '.';
+    }
+
+    return titleBuffer;
+}
+
+bool check_metadata(char** dest, char* substr, const char* match) {
+    int len = strlen(match);
+    if(strncmp(substr, match, len) == 0) {
+        // modify last entry
+        if(*dest != NULL)
+            free(*dest);
+        *dest = malloc(strlen(substr)-len+1);
+        strcpy(*dest, substr+len);
+        return true;
+    }
+    return false;
+}
+
 void playlist_prev(Playlist* p) {
     p->current = p->current->prev;
 }
@@ -49,6 +82,8 @@ Playlist* make_playlist(FILE* file) {
     playlist->tail = NULL;
     playlist->numSongs = 0;
 
+    SongEntry* lastEntry = NULL;
+
     while(fgets(buffer, PATH_BUFFER_SIZE, file) != 0) {
 
         // remove newline at end of buffer
@@ -58,26 +93,53 @@ Playlist* make_playlist(FILE* file) {
             length -= 1;
         }
 
-        if(IsPathFile(buffer) == false) {
+        if(length == 0)
             continue;
+
+        // skip leading whitespace
+        char* substr = buffer;
+        while(substr[0] == ' ' || substr[0] == '\t') {
+            substr++;
+            length--;
         }
 
-        SongEntry* entry = malloc(sizeof(SongEntry));
-        entry->art_path = NULL;
-        entry->song_path = NULL;
-        entry->title = NULL;
+        // is config line
+        if(lastEntry != NULL && length >= 1 && substr[0] == '-') {
+            substr++;
+            length--;
+            while(substr[0] == ' ' || substr[0] == '\t') {
+                substr++;
+                length--;
+            }
 
-        // set song path
-        entry->song_path = malloc(length + 1);
-        strcpy(entry->song_path, buffer);
+            bool res = check_metadata(&lastEntry->title, substr, "title:");
+            if(!res) res = check_metadata(&lastEntry->art_path, substr, "art:");
+        }
+        else {
+            // check if file
+            if(IsPathFile(substr) == false) {
+                printf("Error: %s\n", substr);
+                continue;
+            }
 
-        // set default title
-        const char* title = GetFileName(buffer);
-        entry->title = malloc(strlen(title) + 1);
-        strcpy(entry->title, title);
+            SongEntry* entry = malloc(sizeof(SongEntry));
+            entry->art_path = NULL;
+            entry->song_path = NULL;
+            entry->title = NULL;
 
-        add_link(&playlist, &entry);
-        playlist->numSongs++;
+            // set song path
+            entry->song_path = malloc(length + 1);
+            strcpy(entry->song_path, substr);
+
+            // set default title
+            const char* title = GetFileName(substr);
+            entry->title = alloc_title(title);
+
+            add_link(&playlist, &entry);
+            playlist->numSongs++;
+
+            lastEntry = entry;
+        }
     }
 
     playlist->current = playlist->head;

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include "util.h"
 #include "program.h"
 #include "titlebar.h"
@@ -11,10 +12,14 @@
 #include "vis.h"
 
 #define BTN_SZ 20   // button size
+#define ART_SZ 100   // artwork size
 
 // memory allocated objects
-char* titleBuffer = NULL;
+char* title = NULL;
 Music music = {0};
+
+bool hasArt = false;
+Texture2D art = {0};
 
 float musicLength = 0;
 float musicTime = 0;
@@ -44,6 +49,26 @@ void set_song_position(float pos) {
     musicTime = pos;
 }
 
+void set_title_buffer(const char* text) {
+    // rellocate path buffer
+    if(title != NULL) {
+        free(title);
+    }
+    title = alloc_title(text);
+}
+
+void set_artwork(const char* text) {
+    if(hasArt == true) {
+        UnloadTexture(art);
+        hasArt = false;
+    }
+    if(text == NULL) {
+        return;
+    }
+    art = LoadTexture(text);
+    hasArt = IsTextureValid(art);
+}
+
 void load_music_file(char* path) {
     // start music
     if(hasMusic) {
@@ -51,14 +76,6 @@ void load_music_file(char* path) {
     }
 
     music = LoadMusicStream(path);
-    
-    // rellocate path buffer
-    if(titleBuffer != NULL) {
-        free(titleBuffer);
-    }
-    const char* filename = GetFileName(path);
-    titleBuffer = malloc(strlen(filename) + 1);
-    strcpy(titleBuffer, filename);
     
     hasMusic = IsMusicValid(music);
     if(hasMusic) {
@@ -71,7 +88,7 @@ void load_music_file(char* path) {
         // redirect sample data
         AttachAudioStreamProcessor(music.stream, vis_callback);
 
-        titlebar_update_title(filename);
+        titlebar_update_title(title);
     }
     else {
         isPlaying = false;
@@ -92,17 +109,24 @@ void load_playlist(char* path) {
     if(playlist->current != NULL) {
         if(isShuffle)
             playlist_shuffle_next(playlist);
-        load_music_file(playlist->current->song_path);
+
+        play_current_song();
     }
     else {
-        load_music_file("");
+        load_music_file("");    // force error
     }
+}
+
+void play_current_song(void) {
+    set_title_buffer(playlist->current->title);
+    set_artwork(playlist->current->art_path);
+    load_music_file(playlist->current->song_path);
 }
 
 void prev_song() {
     if(playlist && playlist->current) {
         playlist_prev(playlist);
-        load_music_file(playlist->current->song_path);
+        play_current_song();
     }
 }
 
@@ -114,7 +138,7 @@ void next_song() {
         else {
             playlist_next(playlist);
         }
-        load_music_file(playlist->current->song_path);
+        play_current_song();
     }
 }
 
@@ -187,6 +211,8 @@ void update(void) {
             load_playlist(path);
         }
         else {
+            const char* filename = GetFileName(path);
+            set_title_buffer(filename);
             load_music_file(path);
         }
         UnloadDroppedFiles(files);
@@ -241,5 +267,20 @@ void draw(void) {
     // ICON_CROSS
     if(GuiButton((Rectangle){screenWidth-BTN_SZ, screenHeight-BTN_SZ, BTN_SZ, BTN_SZ}, "#113#")) {
         isRunning = false;
+    }
+
+    if(hasArt) {
+
+        int yOffset = 0;
+        int size = fmin(art.height, art.width);
+
+        // image shift
+        int yShift = 0;
+        if(art.height > art.width)
+            yShift = fmax(art.height/2 - art.width/1.5, 0);
+        DrawTexturePro(art,
+            (Rectangle){(art.width-size)/2, yShift, size, size},
+            (Rectangle){0, screenHeight-CONTROLS_HEIGHT-TITLEBAR_HEIGHT-yOffset-ART_SZ, ART_SZ, ART_SZ},
+            (Vector2){0, 0}, 0, WHITE);
     }
 }

@@ -64,11 +64,12 @@ int main(void) {
         BeginDrawing();
         ClearBackground(BLANK);
         // ClearBackground(BLACK);
+        draw();
         DrawTextureRec(target.texture,
             (Rectangle){0, 0, screenWidth, -(screenHeight-CONTROLS_HEIGHT-TITLEBAR_HEIGHT)},
             (Vector2){0, 0}, WHITE
         );
-        draw();
+        
         EndDrawing();
     }
 

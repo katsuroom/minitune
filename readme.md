@@ -11,6 +11,12 @@ Uses [libwinsane](https://github.com/skeeto/scratch/tree/master/libwinsane) to s
 - Drag and drop:
     - Audio files
     - .txt files containing absolute paths to audio files, separated by newlines.
+        - After each song path, you can optionally include `-title:` and `-art:` lines to customize the displayed title and artwork.
+        ```
+        C:\...\song.mp3
+        - title:My Song
+        - art:C:\...\albumart.jpg
+        ``` 
 - Left/Right: Seek audio
 - Up/Down: Adjust volume
 - S: Toggle shuffle
@@ -41,3 +47,9 @@ $$
 - **Limitations**:
     - Raylib has a fixed frame buffer size of 480 samples, which is padded to 512 samples for FFT.
     - At a 48000 Hz sampling rate, the frequency bin resolution is $\Delta f = 48000/512 \approx 93.75\ \text{Hz}$, which ends up grouping many of the lower frequencies into a single bin.
+
+## Future Work
+- UI for volume adjustment
+- Settings UI for toggling shuffle and configuring visualizations
+- More visualizations
+- Manually buffering more samples for more granular FFT results
