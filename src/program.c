@@ -12,7 +12,6 @@
 #include "vis.h"
 
 #define BTN_SZ 20   // button size
-#define ART_SZ 100   // artwork size
 
 // memory allocated objects
 char* title = NULL;
@@ -28,6 +27,7 @@ bool hasMusic = false;
 bool isLooping = false;
 bool isPlaying = false;
 bool isShuffle = false;
+bool isShowArt = true;
 
 float volume = 1.0;
 float volumeIncrement = 0.1;
@@ -142,6 +142,18 @@ void next_song() {
     }
 }
 
+void toggle_pause() {
+    if(hasMusic == true) {
+        // restart finished song
+        if(IsMusicStreamPlaying(music) == false)
+            PlayMusicStream(music);
+        else
+            PauseMusicStream(music);
+
+        isPlaying = !isPlaying;
+    }
+}
+
 void update(void) {
 
     seeker_update();
@@ -149,6 +161,9 @@ void update(void) {
     // toggle shuffle
     if(IsKeyPressed(KEY_S)) {
         isShuffle = !isShuffle;
+    }
+    if(IsKeyPressed(KEY_I)) {
+        isShowArt = !isShowArt;
     }
 
     // volume
@@ -163,6 +178,9 @@ void update(void) {
         if(volume > 1)
             volume = 1;
         SetMusicVolume(music, volume);
+    }
+    if(IsKeyPressed(KEY_SPACE)) {
+        toggle_pause();
     }
 
     // arrow keys for seeking
@@ -238,15 +256,7 @@ void draw(void) {
     // ICON_PLAYER_PLAY
     // ICON_PLAYER_PAUSE
     if(GuiButton((Rectangle){BTN_SZ-1, screenHeight-BTN_SZ, BTN_SZ, BTN_SZ}, isPlaying ? "#132#" : "#131#")) {
-        if(hasMusic == true) {
-            // restart finished song
-            if(IsMusicStreamPlaying(music) == false)
-                PlayMusicStream(music);
-            else
-                PauseMusicStream(music);
-
-            isPlaying = !isPlaying;
-        }
+        toggle_pause();
     }
 
     // ICON_PLAYER_NEXT
@@ -269,9 +279,7 @@ void draw(void) {
         isRunning = false;
     }
 
-    if(hasArt) {
-
-        int yOffset = 0;
+    if(hasArt && isShowArt) {
         int size = fmin(art.height, art.width);
 
         // image shift
@@ -280,7 +288,7 @@ void draw(void) {
             yShift = fmax(art.height/2 - art.width/1.5, 0);
         DrawTexturePro(art,
             (Rectangle){(art.width-size)/2, yShift, size, size},
-            (Rectangle){0, screenHeight-CONTROLS_HEIGHT-TITLEBAR_HEIGHT-yOffset-ART_SZ, ART_SZ, ART_SZ},
+            (Rectangle){0, screenHeight-CONTROLS_HEIGHT-TITLEBAR_HEIGHT-ART_SZ, ART_SZ, ART_SZ},
             (Vector2){0, 0}, 0, WHITE);
     }
 }

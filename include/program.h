@@ -3,6 +3,7 @@
 
 #define CONTROLS_HEIGHT 20
 #define MAX_TITLE_LENGTH 40
+#define ART_SZ 100   // artwork size
 
 extern float musicLength, musicTime;
 extern int sampleRate;

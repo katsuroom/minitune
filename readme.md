@@ -27,7 +27,9 @@ Uses [libwinsane](https://github.com/skeeto/scratch/tree/master/libwinsane) to s
         ``` 
 - Left/Right: Seek audio
 - Up/Down: Adjust volume
+- Space: Toggle pause
 - S: Toggle shuffle
+- I: Toggle image display
 
 ## How it Works
 - Load music file into a Music stream instance.

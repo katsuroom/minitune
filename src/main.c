@@ -8,7 +8,7 @@
 #include <time.h>
 
 int screenWidth = 320;
-int screenHeight = 240;
+int screenHeight = CONTROLS_HEIGHT+TITLEBAR_HEIGHT+ART_SZ;
 bool isRunning = true;
 
 Vector2 mousePos = {0};
