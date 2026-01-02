@@ -20,6 +20,9 @@ Music music = {0};
 bool hasArt = false;
 Texture2D art = {0};
 
+Font font = {0};
+int fontSize = 10;
+
 float musicLength = 0;
 float musicTime = 0;
 int sampleRate = 0;
@@ -40,6 +43,9 @@ void (*vis_callback)(void *buffer, unsigned int frames) = process_frequency;
 void (*vis_draw)(int screenWidth, int screenHeight) = draw_frequency;
 
 void init(void) {
+    // font = LoadFont("./assets/arial.ttf");
+    font = GetFontDefault();
+
     seeker_init(BTN_SZ*3 - 3, screenHeight - CONTROLS_HEIGHT, screenWidth-(BTN_SZ*6)+6, CONTROLS_HEIGHT);
     titlebar_init();
 }

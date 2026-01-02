@@ -25,8 +25,8 @@ Uses [libwinsane](https://github.com/skeeto/scratch/tree/master/libwinsane) to s
         - title:My Song
         - art:C:\...\albumart.jpg
         ``` 
-- Left/Right: Seek audio
-- Up/Down: Adjust volume
+- Left/Right: Jump forward/backward 3 seconds
+- Up/Down: Raise/lower volume
 - Space: Toggle pause
 - S: Toggle shuffle
 - I: Toggle image display

@@ -10,6 +10,9 @@ extern int sampleRate;
 extern bool hasMusic, isPlaying, isShuffle;
 extern char* title;
 
+extern Font font;
+extern int fontSize;
+
 void init(void);
 void update(void);
 void draw(void);
