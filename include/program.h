@@ -1,7 +1,7 @@
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
-#define CONTROLS_HEIGHT 20
+#define CONTROLS_HEIGHT 22
 #define MAX_TITLE_LENGTH 40
 #define ART_SZ 100   // artwork size when ART_DISPLAY_SIDE
 

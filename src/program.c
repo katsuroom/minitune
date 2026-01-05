@@ -11,7 +11,7 @@
 #include "playlist.h"
 #include "vis.h"
 
-#define BTN_SZ 20   // button size
+#define BTN_SZ 22   // button size
 
 // memory allocated objects
 char* title = NULL;
