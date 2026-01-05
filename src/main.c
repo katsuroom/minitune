@@ -15,7 +15,7 @@ Vector2 mousePos = {0};
 Vector2 mouseOffset = {0};
 bool isDragging = false;
 
-unsigned int flags = FLAG_WINDOW_TRANSPARENT | FLAG_WINDOW_UNDECORATED | FLAG_MSAA_4X_HINT;
+unsigned int flags = FLAG_WINDOW_TRANSPARENT | FLAG_WINDOW_UNDECORATED | FLAG_WINDOW_ALWAYS_RUN | FLAG_MSAA_4X_HINT;
 
 char* preloaded_file = NULL;
 
