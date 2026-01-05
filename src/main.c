@@ -4,7 +4,7 @@
 #include "program.h"
 #include "titlebar.h"
 #include "seeker.h"
-#include <stdio.h>
+#include <string.h>
 #include <time.h>
 
 int screenWidth = 320;
@@ -12,13 +12,40 @@ int screenHeight = CONTROLS_HEIGHT+TITLEBAR_HEIGHT+ART_SZ;
 bool isRunning = true;
 
 Vector2 mousePos = {0};
-
 Vector2 mouseOffset = {0};
 bool isDragging = false;
 
-int main(void) {
-    
-    SetConfigFlags(FLAG_WINDOW_TRANSPARENT | FLAG_WINDOW_UNDECORATED | FLAG_WINDOW_TOPMOST | FLAG_MSAA_4X_HINT);
+unsigned int flags = FLAG_WINDOW_TRANSPARENT | FLAG_WINDOW_UNDECORATED | FLAG_MSAA_4X_HINT;
+
+char* preloaded_file = NULL;
+
+void parse_args(int argc, char** argv) {
+    // start at 1 to skip program name
+    for(int i = 1; i < argc; ++i) {
+        if(argv[i][0] == '-') {
+            if(strcmp(argv[i], "-full") == 0) {
+                artDisplayMode = ART_DISPLAY_FULL;
+            }
+            else if(strcmp(argv[i], "-top") == 0) {
+                // enable always-on-top
+                flags |= FLAG_WINDOW_TOPMOST;
+            }
+        }
+        else if(preloaded_file == NULL) {
+            preloaded_file = argv[i];
+        }
+    }
+
+    if(artDisplayMode == ART_DISPLAY_FULL) {
+        screenHeight = CONTROLS_HEIGHT+TITLEBAR_HEIGHT+screenWidth;
+    }
+}
+
+int main(int argc, char** argv) {
+
+    parse_args(argc, argv);
+
+    SetConfigFlags(flags);
     InitWindow(screenWidth, screenHeight, "minitune");
     GuiLoadStyleDefault();
 
@@ -30,6 +57,9 @@ int main(void) {
 
     srand(time(NULL));
     init();
+
+    if(preloaded_file != NULL)
+        load_file(preloaded_file);
 
     while(!WindowShouldClose() && isRunning == true) {
 

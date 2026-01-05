@@ -31,7 +31,7 @@ void seeker_init(int x, int y, int width, int height) {
     sRect.height = height;
 
     sBar.width = sRect.width - 2*offset; 
-    sBar.height = 2;
+    sBar.height = 6;
     sBar.x = sRect.x + offset;
     sBar.y = sRect.y + (sRect.height - sBar.height)/2;
     sBar.padding = 4;
@@ -81,6 +81,7 @@ void seeker_draw(void) {
     DrawRectangleLinesEx((Rectangle){sRect.x, sRect.y, sRect.width, sRect.height}, 2, GRAY);
 
     DrawRectangle(sBar.x, sBar.y, sBar.width, sBar.height, GRAY);
+    DrawRectangle(sBar.x, sBar.y, sDot.x - sBar.x, sBar.height, (Color){180, 60, 120, 255});
     
     DrawCircle(sDot.x, sDot.y, seekerRadius, BLACK);
 }

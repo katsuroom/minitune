@@ -19,6 +19,7 @@ Music music = {0};
 
 bool hasArt = false;
 Texture2D art = {0};
+int artDisplayMode = ART_DISPLAY_SIDE;
 
 Font font = {0};
 int fontSize = 10;
@@ -63,16 +64,47 @@ void set_title_buffer(const char* text) {
     title = alloc_title(text);
 }
 
-void set_artwork(const char* text) {
+void set_artwork(const char* path) {
     if(hasArt == true) {
         UnloadTexture(art);
         hasArt = false;
     }
-    if(text == NULL) {
+    if(path == NULL) {
         return;
     }
-    art = LoadTexture(text);
-    hasArt = IsTextureValid(art);
+
+    Image image = LoadImage(path);
+    if(IsImageValid(image)) {
+        // get cutout of image
+        int size = fmin(image.height, image.width);
+
+        // image shift
+        int yShift = 0;
+        if(image.height > image.width)
+            yShift = fmax(image.height/2 - image.width/1.5, 0);
+
+        Image slice = ImageFromImage(image, (Rectangle){(image.width-size)/2, yShift, size, size});
+        UnloadImage(image);
+
+        int targetSize = 0;
+        if(artDisplayMode == ART_DISPLAY_SIDE) {
+            targetSize = ART_SZ;
+        }
+        else if(artDisplayMode == ART_DISPLAY_FULL) {
+            targetSize = screenWidth;
+        }
+
+        ImageResize(&slice, targetSize, targetSize);
+
+        art = LoadTextureFromImage(slice);
+
+        hasArt = IsTextureValid(art);
+        if(hasArt == true) {
+            SetTextureFilter(art, TEXTURE_FILTER_TRILINEAR);
+        }
+
+        UnloadImage(slice);
+    }
 }
 
 void load_music_file(char* path) {
@@ -120,6 +152,25 @@ void load_playlist(char* path) {
     }
     else {
         load_music_file("");    // force error
+    }
+}
+
+void load_file(char* path) {
+
+    if(playlist != NULL) {
+        free_playlist(playlist);
+        playlist = NULL;
+    }
+
+    // check extension of file
+    const char* ext = GetFileExtension(path);
+    if(strcmp(ext, ".txt") == 0) {
+        load_playlist(path);
+    }
+    else {
+        const char* filename = GetFileName(path);
+        set_title_buffer(filename);
+        load_music_file(path);
     }
 }
 
@@ -224,21 +275,8 @@ void update(void) {
         // only take first file
         char* path = files.paths[0];
 
-        if(playlist != NULL) {
-            free_playlist(playlist);
-            playlist = NULL;
-        }
+        load_file(path);
 
-        // check extension of file
-        const char* ext = GetFileExtension(path);
-        if(strcmp(ext, ".txt") == 0) {
-            load_playlist(path);
-        }
-        else {
-            const char* filename = GetFileName(path);
-            set_title_buffer(filename);
-            load_music_file(path);
-        }
         UnloadDroppedFiles(files);
     }
 }
@@ -286,15 +324,7 @@ void draw(void) {
     }
 
     if(hasArt && isShowArt) {
-        int size = fmin(art.height, art.width);
-
-        // image shift
-        int yShift = 0;
-        if(art.height > art.width)
-            yShift = fmax(art.height/2 - art.width/1.5, 0);
-        DrawTexturePro(art,
-            (Rectangle){(art.width-size)/2, yShift, size, size},
-            (Rectangle){0, screenHeight-CONTROLS_HEIGHT-TITLEBAR_HEIGHT-ART_SZ, ART_SZ, ART_SZ},
-            (Vector2){0, 0}, 0, WHITE);
+        DrawRectangle(0, screenHeight-CONTROLS_HEIGHT-TITLEBAR_HEIGHT-art.height, art.width, art.height, BLACK);
+        DrawTexture(art, 0, screenHeight-CONTROLS_HEIGHT-TITLEBAR_HEIGHT-art.height, WHITE);
     }
 }

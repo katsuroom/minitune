@@ -23,13 +23,23 @@ Uses [libwinsane](https://github.com/skeeto/scratch/tree/master/libwinsane) to s
         ```
         C:\...\song.mp3
         - title:My Song
-        - art:C:\...\albumart.jpg
+        - art:C:\...\albumart.png
+        C:\...\song2.mp3
+        - title:My Song2
+        - art:C:\...\albumart2.png
         ``` 
 - Left/Right: Jump forward/backward 3 seconds
 - Up/Down: Raise/lower volume
 - Space: Toggle pause
 - S: Toggle shuffle
 - I: Toggle image display
+
+## Command Line Args
+
+Optionally, minitune can be started from the command line with additional arguments. The following arguments can be given in any order:
+- `-top`: enable Always On Top.
+- `-full`: If a playlist .txt file contains images, the image will display at a larger size, spanning the full window width.
+- `<filepath>`: The first argument not beginning with `-` will be treated as a filepath to an audio file or playlist. This file will be automatically loaded at startup.
 
 ## How it Works
 - Load music file into a Music stream instance.
