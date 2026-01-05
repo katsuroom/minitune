@@ -47,15 +47,15 @@ Optionally, minitune can be started from the command line with additional argume
 - Samples are 32-bit floats in range (-1, 1)
 
 ### Volume Visualization
-- Take root mean square (RMS) of samples.
+- Take root mean square (RMS) of samples.  
 $$\text{RMS} = \sqrt{\frac{1}{N} \sum_{i=1}^N {x_i}^2}$$
-- Convert to decibels, set minimum to -40 dB.
+- Convert to decibels, set minimum to -40 dB.  
 $$\text{dB} = 20 * log_{10}(\text{RMS})$$
 
 ### Frequency Visualization
 - Fast Fourier Transform on samples.
 - FFT code from: https://rosettacode.org/wiki/Fast_Fourier_transform#C
-- FFT magnitude:
+- FFT magnitude:  
 $$|k| = \sqrt{\text{real(k)}^2 + \text{imag(k)}^2}$$
 - Magnitude is then converted into decibels.
 - **Limitations**:
