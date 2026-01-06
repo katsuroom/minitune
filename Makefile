@@ -1,5 +1,5 @@
 LIBS = -lraylib -lopengl32 -lgdi32 -lwinmm
-FLAGS = -Wl,--subsystem,windows -O3
+FLAGS = -Wl,--subsystem,windows
 SRCS = src/*.c src/vis/*.c lib/libwinsane.o
 
 RES = bin/resource.rc.data

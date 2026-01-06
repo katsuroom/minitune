@@ -10,22 +10,22 @@ char appName[] = "minitune";
 char errorMsg[] = "Error: file could not be opened.";
 
 char* textDisplay = appName;
+char timeBuffer[32] = {0};
 
 struct {
     Color color;
 } titlebar;
 
-int textHeight;
+int xPad = 6;
+
+int titleMaxWidth = 0;
 
 void titlebar_init(void) {
     titlebar.color = GRAY;
 
-    // Vector2 dim = MeasureTextEx(GetFontDefault(), "0", 10, 0);
-    Vector2 dim = MeasureTextEx(font, appName, fontSize, 1);
-    textHeight = dim.y;
+    Vector2 timerDim = MeasureTextEx(font, "00:00 / 00:00", fontSize, fontSpacing);
+    titleMaxWidth = screenWidth-timerDim.x-20-xPad*2;
 }
-
-char timeBuffer[32] = {0};
 
 void titlebar_update_title(char* title) {
     textDisplay = title;
@@ -38,14 +38,16 @@ void titlebar_set_error(void) {
 }
 
 void titlebar_draw() {
-    // playing text
-    DrawRectangle(0, screenHeight - CONTROLS_HEIGHT - TITLEBAR_HEIGHT, screenWidth, TITLEBAR_HEIGHT, (Color){220, 220, 220, 255});
-    
-    DrawTextEx(font, textDisplay, (Vector2){4, screenHeight - CONTROLS_HEIGHT - TITLEBAR_HEIGHT + (TITLEBAR_HEIGHT - textHeight)/2}, fontSize, 1, titlebar.color);
+    int yPos = screenHeight - CONTROLS_HEIGHT - TITLEBAR_HEIGHT;
+    DrawRectangle(0, yPos, screenWidth, TITLEBAR_HEIGHT, (Color){220, 220, 220, 255});
 
     // music time
     snprintf(timeBuffer, sizeof(timeBuffer), "%02d:%02d / %02d:%02d", (int)musicTime / 60, (int)musicTime % 60, (int)musicLength / 60, (int)musicLength % 60);
 
-    Vector2 dim = MeasureTextEx(font, timeBuffer, fontSize, 1);
-    DrawTextEx(font, timeBuffer, (Vector2){screenWidth - 4 - dim.x, screenHeight - CONTROLS_HEIGHT - TITLEBAR_HEIGHT + (TITLEBAR_HEIGHT - textHeight)/2}, fontSize, 1, BLACK);
+    Vector2 dim = MeasureTextEx(font, timeBuffer, fontSize, fontSpacing);
+    DrawTextEx(font, timeBuffer, (Vector2){screenWidth - xPad - dim.x, yPos + (TITLEBAR_HEIGHT - dim.y)/2}, fontSize, fontSpacing, BLACK);
+
+    // playing text
+    // DrawRectangle(xPad, yPos, titleMaxWidth, TITLEBAR_HEIGHT, DARKGRAY);
+    DrawTextEx(font, textDisplay, (Vector2){xPad, yPos + (TITLEBAR_HEIGHT - dim.y)/2}, fontSize, fontSpacing, titlebar.color);
 }

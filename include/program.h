@@ -2,7 +2,7 @@
 #define PROGRAM_H
 
 #define CONTROLS_HEIGHT 22
-#define MAX_TITLE_LENGTH 40
+#define MAX_TITLE_LENGTH 79
 #define ART_SZ 100   // artwork size when ART_DISPLAY_SIDE
 
 extern float musicLength, musicTime;
@@ -17,7 +17,7 @@ enum {
 extern int artDisplayMode;
 
 extern Font font;
-extern int fontSize;
+extern int fontSize, fontSpacing;
 
 void init(void);
 void update(void);

@@ -3,7 +3,9 @@
 #ifndef TITLEBAR_H
 #define TITLEBAR_H
 
-#define TITLEBAR_HEIGHT 14
+#define TITLEBAR_HEIGHT 16
+
+extern int titleMaxWidth;
 
 void titlebar_init(void);
 void titlebar_update_title(char* title);

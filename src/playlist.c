@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "program.h"
 #include "playlist.h"
+#include "titlebar.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -36,6 +37,18 @@ char* alloc_title(const char* title) {
     char* titleBuffer = malloc(length+1);
     strncpy(titleBuffer, title, length);
     titleBuffer[length] = 0;
+
+    // remove characters if longer than titleMaxWidth
+    Vector2 dim = MeasureTextEx(font, titleBuffer, fontSize, fontSpacing);
+    unsigned char c = 0;
+    while(dim.x > titleMaxWidth || (c >> 6) == 0b10) {
+        // erase characters
+        trimmed = true;
+        c = titleBuffer[length-1];
+        length--;
+        titleBuffer[length] = 0;
+        dim = MeasureTextEx(font, titleBuffer, fontSize, fontSpacing);
+    }
 
     if(trimmed == true) {
         for(int i = 0; i < 3; ++i)

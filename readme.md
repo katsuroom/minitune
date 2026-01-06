@@ -5,10 +5,13 @@ Mini music player with customizable playlist support.
 ![](screenshot.png) [video](https://www.youtube.com/watch?v=yznHvXmp9Bc)  
 <sup>The track shown above is [Shivered Fragments](https://suno.com/song/1f77498f-1861-4f3b-90b4-d35b29c30745) by kick ice on Suno. It's a very good song, please listen to it!</sup>
 
-Made using [Raylib v5.5](https://github.com/raysan5/raylib) with Raygui v4.0.
-- Raylib: uses commit **11429b4** for `SeekMusicStream()` fix (issue #4521), built from source.
+### Made With
 
-Uses [libwinsane](https://github.com/skeeto/scratch/tree/master/libwinsane) to support unicode filepaths on Windows.
+- [Raylib v5.5](https://github.com/raysan5/raylib)
+    - Uses commit **11429b4** for `SeekMusicStream()` fix (issue #4521), built from source.
+- [Raygui v4.0](https://github.com/raysan5/raygui) for GUI controls.
+- [libwinsane](https://github.com/skeeto/scratch/tree/master/libwinsane) to support unicode filepaths on Windows.
+- [fusion-pixel-font](https://github.com/TakWolf/fusion-pixel-font), a pixel font that supports unicode characters.
 
 ## How to Build
 - **Windows**: Download this repository and use the command `make release` to build the executable.

@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
     SetTargetFPS(60);
     SetExitKey(KEY_NULL);
 
-    RenderTexture2D target = LoadRenderTexture(screenWidth, screenHeight-CONTROLS_HEIGHT-TITLEBAR_HEIGHT);
+    RenderTexture2D visTarget = LoadRenderTexture(screenWidth, screenHeight-CONTROLS_HEIGHT-TITLEBAR_HEIGHT);
 
     srand(time(NULL));
     init();
@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
 
         update();
 
-        BeginTextureMode(target);
+        BeginTextureMode(visTarget);
         ClearBackground(BLANK);
         draw_visualization();
         EndTextureMode();
@@ -95,8 +95,8 @@ int main(int argc, char** argv) {
         ClearBackground(BLANK);
         // ClearBackground(BLACK);
         draw();
-        DrawTextureRec(target.texture,
-            (Rectangle){0, 0, screenWidth, -(screenHeight-CONTROLS_HEIGHT-TITLEBAR_HEIGHT)},
+        DrawTextureRec(visTarget.texture,
+            (Rectangle){0, 0, visTarget.texture.width, -visTarget.texture.height},
             (Vector2){0, 0}, WHITE
         );
         
