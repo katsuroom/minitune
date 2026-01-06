@@ -20,7 +20,6 @@ struct {
 } sDot;
 
 int offset = 12;
-int seekerRadius = 4;
 
 static bool isDragging = false;
 
@@ -83,5 +82,5 @@ void seeker_draw(void) {
     DrawRectangle(sBar.x, sBar.y, sBar.width, sBar.height, GRAY);
     DrawRectangle(sBar.x, sBar.y, sDot.x - sBar.x, sBar.height, (Color){180, 60, 120, 255});
     
-    DrawCircle(sDot.x, sDot.y, seekerRadius, BLACK);
+    DrawCircle(sDot.x, sDot.y, 4, BLACK);
 }

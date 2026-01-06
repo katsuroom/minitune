@@ -45,7 +45,35 @@ void (*vis_callback)(void *buffer, unsigned int frames) = process_frequency;
 void (*vis_draw)(int screenWidth, int screenHeight) = draw_frequency;
 
 void init(void) {
-    font = LoadFontEx("./assets/fusion-pixel-10px-proportional-ja.otf", fontSize, NULL, 60000);
+
+    typedef struct {
+        int a, b;
+    } Range;
+
+    Range ranges[] = {
+        {0x0020, 0x017F},   // latin
+        {0x0400, 0x04ff},   // cyrillic
+        {0x3000, 0x30FF},   // japanese
+        {0x4e00, 0x9fff},   // chinese  
+    };
+
+    // codepoints count
+    int num_codepoints = 0;
+    for(int i = 0; i < sizeof(ranges) / sizeof(Range); ++i) {
+        num_codepoints += ranges[i].b - ranges[i].a;
+    }
+
+    // codepoints array
+    int codepoints[num_codepoints];
+    int idx = 0;
+    for(int i = 0; i < sizeof(ranges) / sizeof(Range); ++i) {
+        for(int k = ranges[i].a; k <= ranges[i].b; ++k) {
+            codepoints[idx] = k;
+            idx++;
+        }
+    }
+
+    font = LoadFontEx("./assets/fusion-pixel-10px-proportional-ja.otf", fontSize, codepoints, num_codepoints);
     if(IsFontValid(font) == false) {
         font = GetFontDefault();
         fontSize = 10;
