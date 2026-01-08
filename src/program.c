@@ -54,7 +54,8 @@ void init(void) {
         {0x0020, 0x017F},   // latin
         {0x0400, 0x04ff},   // cyrillic
         {0x3000, 0x30FF},   // japanese
-        {0x4e00, 0x9fff},   // chinese  
+        {0x4e00, 0x9fff},   // chinese
+		{0xFF00, 0xFFEF}	// halfwidth + fullwidth
     };
 
     // codepoints count
