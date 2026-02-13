@@ -36,6 +36,7 @@ Mini music player with customizable playlist support.
 - Space: Toggle pause
 - S: Toggle shuffle
 - I: Toggle image display
+- Page Up/Page Down: Play previous/next song
 
 ## Command Line Args
 

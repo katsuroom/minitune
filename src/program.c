@@ -196,6 +196,8 @@ void load_file(char* path) {
         playlist = NULL;
     }
 
+    set_artwork(NULL);
+
     // check extension of file
     const char* ext = GetFileExtension(path);
     if(strcmp(ext, ".txt") == 0) {
@@ -255,6 +257,14 @@ void update(void) {
     }
     if(IsKeyPressed(KEY_I)) {
         isShowArt = !isShowArt;
+    }
+
+    // next, prev
+    if(IsKeyPressed(KEY_PAGE_UP)) {
+        prev_song();
+    }
+    if(IsKeyPressed(KEY_PAGE_DOWN)) {
+        next_song();
     }
 
     // volume
